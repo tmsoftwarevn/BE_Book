@@ -18,7 +18,7 @@ const getInfoDeliveryService = async (id) => {
   let g = await db.infoDelivery.findAll({
     attributes: ["fullname", "phone", "address", "id"],
     include: {
-      model: db.User,
+      model: db.user,
       where: { id: id },
       attributes: [],
     },

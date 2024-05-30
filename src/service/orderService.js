@@ -1,6 +1,6 @@
 const db = require("../models");
 const createOrderService = async (order) => {
-  let c = await db.Order.create({
+  let c = await db.order.create({
     totalProduct: order.totalProduct,
     payment: order.payment,
     total: order.total,
@@ -21,20 +21,20 @@ const createOrderService = async (order) => {
 const getOrderHistoryUser = async (idUser, page, limit) => {
   page = +page;
   limit = +limit;
-  let total = await db.Order.count({
+  let total = await db.order.count({
     include: [
       {
-        model: db.User,
+        model: db.user,
         where: { id: idUser },
         attributes: [],
       },
       {
-        model: db.Status,
+        model: db.status,
         attributes: [],
       },
     ],
   });
-  let list = await db.Order.findAll({
+  let list = await db.order.findAll({
     offset: (page - 1) * limit,
     limit: limit,
     order: [["createdAt", "DESC"]],
@@ -44,19 +44,19 @@ const getOrderHistoryUser = async (idUser, page, limit) => {
       "total",
       "id",
       "createdAt",
-      "Status.status",
+      "status.status",
       "address",
       "phone",
       "fullname",
     ],
     include: [
       {
-        model: db.User,
+        model: db.user,
         where: { id: idUser },
         attributes: [],
       },
       {
-        model: db.Status,
+        model: db.status,
         attributes: [],
       },
     ],
@@ -70,14 +70,14 @@ const getOrderHistoryUser = async (idUser, page, limit) => {
 const getOrderAdminService = async (page, limit, search) => {
   page = +page;
   limit = +limit;
-  let total = await db.Order.count({
+  let total = await db.order.count({
     include: {
-      model: db.Status,
+      model: db.status,
       where: search ? { id: search } : "",
       attributes: [],
     },
   });
-  let list = await db.Order.findAll({
+  let list = await db.order.findAll({
     order: [["createdAt", "DESC"]],
     attributes: [
       "totalProduct",
@@ -88,10 +88,10 @@ const getOrderAdminService = async (page, limit, search) => {
       "address",
       "phone",
       "fullname",
-      "Status.status",
+      "status.status",
     ],
     include: {
-      model: db.Status,
+      model: db.status,
       where: search ? { id: search } : "",
       attributes: [],
     },
@@ -110,7 +110,7 @@ const updateOrderStatusService = async (Order, Status) => {
     let selector = {
       where: { id: +Order },
     };
-    let a = await db.Order.update(values, selector);
+    let a = await db.order.update(values, selector);
     if (a) {
       return {
         DT: "update success",
@@ -121,21 +121,21 @@ const updateOrderStatusService = async (Order, Status) => {
 const getOrderStatus1 = async (idUser, idStatus, page, limit) => {
   page = +page;
   limit = +limit;
-  let total = await db.Order.count({
+  let total = await db.order.count({
     include: [
       {
-        model: db.User,
+        model: db.user,
         where: { id: idUser },
         attributes: [],
       },
       {
-        model: db.Status,
+        model: db.status,
         where: { id: +idStatus },
         attributes: [],
       },
     ],
   });
-  let list = await db.Order.findAll({
+  let list = await db.order.findAll({
     offset: (page - 1) * limit,
     limit: limit,
     order: [["createdAt", "DESC"]],
@@ -145,19 +145,19 @@ const getOrderStatus1 = async (idUser, idStatus, page, limit) => {
       "total",
       "id",
       "createdAt",
-      "Status.status",
+      "status.status",
       "address",
       "phone",
       "fullname",
     ],
     include: [
       {
-        model: db.User,
+        model: db.user,
         where: { id: idUser },
         attributes: [],
       },
       {
-        model: db.Status,
+        model: db.status,
         where: { id: +idStatus },
         attributes: [],
       },

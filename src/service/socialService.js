@@ -8,12 +8,12 @@ require("dotenv").config();
 
 const createUserSocial = async (drawData, type) => {
   try {
-    let check = await db.User.findOne({
+    let check = await db.user.findOne({
       where: { email: drawData.email },
     });
     if (check) check = check.get({ plain: true });
     if (!check) {
-      let newUser = await db.User.create({
+      let newUser = await db.user.create({
         fullName: drawData.username,
         email: drawData.email,
         type: type,
@@ -92,10 +92,10 @@ const sendCode = async (email) => {
   }
 };
 const saveCodePassWord = async (email, code) => {
-  await db.User.update({ OTP: code }, { where: { email: email } });
+  await db.user.update({ OTP: code }, { where: { email: email } });
 };
 const checkOTPService = async (email, otp) => {
-  let c = await db.User.findOne({
+  let c = await db.user.findOne({
     where: {
       [Op.and]: [
         {

@@ -1,11 +1,11 @@
 import { Op } from "sequelize";
 //import { Sequelize, sequelize } from "../models/index";
-const Sequelize = require("../models/index");
-const sequelize = require("../models/index");
+// const Sequelize = require("../models/index");
+const { sequelize } = require("../models/index");
 const db = require("../models");
 
 const createBookService = async (book) => {
-  let info = await db.Book.create({
+  let info = await db.book.create({
     author: book.author,
     thumbnail: book.thumbnail,
     slider: book.slider,
@@ -27,7 +27,7 @@ const createBookService = async (book) => {
 };
 
 const getInfoBookService = async (idBook) => {
-  let inf = await db.Book.findOne({
+  let inf = await db.book.findOne({
     where: { id: idBook },
     attributes: [
       "id",
@@ -39,12 +39,12 @@ const getInfoBookService = async (idBook) => {
       "sold",
       "quantity",
       "rate",
-      "Category.category",
+      "category.category",
       "createdAt",
       "updatedAt",
     ],
     include: {
-      model: db.Category,
+      model: db.category,
       attributes: [],
     },
     raw: true,
@@ -59,7 +59,7 @@ const getInfoBookService = async (idBook) => {
 };
 
 const deleteBookService = async (id) => {
-  let del = db.Book.destroy({
+  let del = db.book.destroy({
     where: { id: id },
   });
   if (del) {
@@ -85,11 +85,11 @@ const updateBookService = async (id, up) => {
   let selector = {
     where: { id: id },
   };
-  let find = await db.Book.findOne({
+  let find = await db.book.findOne({
     where: { id: id },
   });
   if (find) {
-    let a = await db.Book.update(values, selector);
+    let a = await db.book.update(values, selector);
     return {
       DT: a,
     };
@@ -110,7 +110,7 @@ const getListBookService = async (
   page = +page;
   limit = +limit;
   try {
-    let total = await db.Book.count({
+    let total = await db.book.count({
       where: {
         [Op.and]: [
           {
@@ -127,12 +127,12 @@ const getListBookService = async (
       },
       include: {
         where: category ? { id: category } : "",
-        model: db.Category,
+        model: db.category,
         attributes: [],
       },
     });
     //----------------------------------------
-    let list = await db.Book.findAll({
+    let list = await db.book.findAll({
       offset: (page - 1) * limit,
       limit: limit,
       order: [[field, sort]],
@@ -161,13 +161,13 @@ const getListBookService = async (
         "sold",
         "quantity",
         "rate",
-        "Category.category",
+        "category.category",
         "createdAt",
         "updatedAt",
       ],
       include: {
         where: category ? { id: category } : "",
-        model: db.Category,
+        model: db.category,
         attributes: [],
       },
       raw: true,
@@ -193,7 +193,7 @@ const getListBookHomeService = async (
   let arrPrice = JSON.parse("[" + price + "]");
 
   try {
-    let total = await db.Book.count({
+    let total = await db.book.count({
       where: {
         [Op.and]: [
           {
@@ -209,7 +209,7 @@ const getListBookHomeService = async (
         ],
       },
       include: {
-        model: db.Category,
+        model: db.category,
         where: category
           ? {
               id: array,
@@ -218,7 +218,7 @@ const getListBookHomeService = async (
         attributes: [],
       },
     });
-    let list = await db.Book.findAll({
+    let list = await db.book.findAll({
       offset: (page - 1) * limit,
       limit: limit,
       order: field ? [[field, sort]] : [],
@@ -232,7 +232,7 @@ const getListBookHomeService = async (
         "sold",
         "quantity",
         "rate",
-        "Category.category",
+        "category.category",
         "createdAt",
         "updatedAt",
       ],
@@ -251,7 +251,7 @@ const getListBookHomeService = async (
         ],
       },
       include: {
-        model: db.Category,
+        model: db.category,
         where: category
           ? {
               id: array,
@@ -276,7 +276,7 @@ const updateBookAfterOrder = async (bookId, count) => {
     quantity: sequelize.literal(`quantity - ${count}`),
   };
 
-  let u = await db.Book.update(values, selector);
+  let u = await db.book.update(values, selector);
   if (u) {
     return {
       DT: u,
@@ -285,7 +285,7 @@ const updateBookAfterOrder = async (bookId, count) => {
 };
 
 const listBookPopulateServiceAll = async () => {
-  let d = await db.Book.findAll({
+  let d = await db.book.findAll({
     order: [["sold", "DESC"]],
   });
   if (d) {
@@ -299,14 +299,14 @@ const searchBookService = async (mainText, page, limit) => {
   page = +page;
   limit = +limit;
   try {
-    let total = await db.Book.count({
+    let total = await db.book.count({
       where: {
         mainText: {
           [Op.like]: mainText ? "%" + mainText + "%" : "%%",
         },
       },
     });
-    let list = await db.Book.findAll({
+    let list = await db.book.findAll({
       offset: (page - 1) * limit,
       limit: limit,
       attributes: [
@@ -319,7 +319,7 @@ const searchBookService = async (mainText, page, limit) => {
         "sold",
         "quantity",
         "rate",
-        "Category.category",
+        "category.category",
         "createdAt",
         "updatedAt",
       ],
@@ -329,13 +329,13 @@ const searchBookService = async (mainText, page, limit) => {
         },
       },
       include: {
-        model: db.Category,
+        model: db.category,
         attributes: [],
       },
       raw: true,
     });
     if (list.length === 0) {
-      list = await db.Book.findAll({
+      list = await db.book.findAll({
         offset: (page - 1) * limit,
         limit: limit,
         attributes: [
@@ -348,7 +348,7 @@ const searchBookService = async (mainText, page, limit) => {
           "sold",
           "quantity",
           "rate",
-          "Category.category",
+          "category.category",
           "createdAt",
           "updatedAt",
         ],
@@ -358,7 +358,7 @@ const searchBookService = async (mainText, page, limit) => {
           },
         },
         include: {
-          model: db.Category,
+          model: db.category,
           attributes: [],
         },
         raw: true,

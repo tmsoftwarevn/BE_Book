@@ -4,7 +4,7 @@ import checkMiddleware from "../middleware/checkMiddleware";
 
 const getInfoUser = async (user) => {
   try {
-    const info = await db.User.findOne({
+    const info = await db.user.findOne({
       where: { id: user.id },
       attributes: [
         "fullName",
@@ -38,7 +38,7 @@ const getAccount = async (req, res) => {
   }
 };
 const saveRefreshToken = async (user, newRT) => {
-  const update = await db.User.update(
+  const update = await db.user.update(
     { refreshToken: newRT },
     { where: { email: user.email }, raw: true }
   );
@@ -48,7 +48,7 @@ const newAccessTokenFromRT = async (req, res) => {
   try {
     const cookies = req.cookies;
     if (cookies && cookies?.refreshToken) {
-      const checkUser = await db.User.findOne({
+      const checkUser = await db.user.findOne({
         where: { refreshToken: cookies.refreshToken },
       });
       let decoded = checkMiddleware.verifyToken(cookies.refreshToken);
@@ -81,7 +81,7 @@ const newAccessTokenFromRT = async (req, res) => {
 };
 const deleteRefreshToken = async (id) => {
   if (id) {
-    let d = await db.User.update({ refreshToken: null }, { where: { id: id } });
+    let d = await db.user.update({ refreshToken: null }, { where: { id: id } });
   }
 };
 export default {

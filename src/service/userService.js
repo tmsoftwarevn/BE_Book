@@ -31,7 +31,7 @@ const loginUserService = async (rawData) => {
         message: ["Email chưa đúng định dạng"],
       };
     }
-    let user = await db.User.findOne({
+    let user = await db.user.findOne({
       where: {
         email: rawData.email,
       },
@@ -70,7 +70,7 @@ const hashUserPassword = (userPassword) => {
 };
 const checkEmailExist = async (userEmail) => {
   try {
-    let user = await db.User.findOne({
+    let user = await db.user.findOne({
       where: { email: userEmail },
     });
 
@@ -101,7 +101,7 @@ const registerUserService = async (rawData) => {
       };
     }
     let hashPassword = hashUserPassword(rawData.password);
-    let newUser = await db.User.create({
+    let newUser = await db.user.create({
       fullName: rawData.fullName,
       email: rawData.email,
       password: hashPassword,
@@ -130,7 +130,7 @@ const getListUserService = async (
   try {
     page = +page;
     limit = +limit;
-    let total = await db.User.count({
+    let total = await db.user.count({
       where: {
         [Op.and]: [
           {
@@ -146,7 +146,7 @@ const getListUserService = async (
         ],
       },
     });
-    let list = await db.User.findAll({
+    let list = await db.user.findAll({
       offset: (page - 1) * limit,
       limit: limit,
       order: [[field, sort]],
@@ -182,7 +182,7 @@ const getListUserService = async (
 
 const deleteUserService = async (userId) => {
   try {
-    let del = await db.User.destroy({
+    let del = await db.user.destroy({
       where: { id: userId },
     });
     if (del) {
@@ -208,7 +208,7 @@ const updateUserSerice = async (id, name) => {
       message: "Vui lòng nhập đầy đủ thông tin",
     };
   try {
-    let u = await db.User.update(
+    let u = await db.user.update(
       {
         fullName: name,
       },
@@ -229,7 +229,7 @@ const updatePasswordUser = async (email, newPass) => {
         message: "Vui lòng nhập đầy đủ thông tin",
       };
     let hashPassword = hashUserPassword(newPass);
-    let u = await db.User.update(
+    let u = await db.user.update(
       { password: hashPassword },
       { where: { email: email } }
     );
@@ -243,7 +243,7 @@ const updatePasswordUser = async (email, newPass) => {
   }
 };
 const checkPasswordService = async (email, pass) => {
-  let user = await db.User.findOne({
+  let user = await db.user.findOne({
     where: {
       email: email,
     },

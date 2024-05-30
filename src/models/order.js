@@ -2,20 +2,20 @@
 import { v4 as uuidv4 } from "uuid";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Order extends Model {
+  class order extends Model {
     static associate(models) {
-      Order.belongsTo(models.User, {
+      order.belongsTo(models.user, {
         foreignKey: "idUser",
       });
-      Order.hasMany(models.OrderDetail, {
+      order.hasMany(models.orderDetail, {
         foreignKey: "idOrder",
       });
-      Order.belongsTo(models.Status, {
+      order.belongsTo(models.status, {
         foreignKey: "idStatus",
       });
     }
   }
-  Order.init(
+  order.init(
     {
       totalProduct: DataTypes.INTEGER,
       payment: DataTypes.STRING,
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Order",
+      modelName: "order",
     }
   );
-  return Order;
+  return order;
 };

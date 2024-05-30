@@ -2,6 +2,26 @@ import userService from "../service/userService";
 import jwtService from "../service/jwtService";
 import checkMiddleware from "../middleware/checkMiddleware";
 require("dotenv").config();
+
+const postLogout = async (req, res) => {
+  try {
+    await jwtService.deleteRefreshToken(req.body.id);
+    res.clearCookie("refreshToken", {
+      domain: process.env.COOKIE_DOMAIN,
+      path: "/",
+    });
+    return res.status(200).json({
+      EC: 1,
+      data: "Logout success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      message: "Some thing wrong server",
+    });
+  }
+};
 const postLogin = async (req, res) => {
   try {
     let data = await userService.loginUserService(req.body);
@@ -33,26 +53,6 @@ const postLogin = async (req, res) => {
     return res.status(500).json({
       EC: -1,
       message: ["Some thing wrong server"],
-    });
-  }
-};
-
-const postLogout = async (req, res) => {
-  try {
-    await jwtService.deleteRefreshToken(req.body.id);
-    res.clearCookie("refreshToken", {
-      domain: process.env.COOKIE_DOMAIN,
-      path: "/",
-    });
-    return res.status(200).json({
-      EC: 1,
-      data: "Logout success",
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EC: -1,
-      message: "Some thing wrong server",
     });
   }
 };

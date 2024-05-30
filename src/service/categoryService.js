@@ -1,6 +1,6 @@
 const db = require("../models");
 const createCategoryService = async (cate) => {
-  let data = await db.Category.create({
+  let data = await db.category.create({
     category: cate,
   });
   data = data.get({ plain: true });
@@ -13,7 +13,7 @@ const createCategoryService = async (cate) => {
 };
 
 const listCatgoryService = async () => {
-  let data = await db.Category.findAll({
+  let data = await db.category.findAll({
     attributes: ["id", "category"],
     raw: true,
   });

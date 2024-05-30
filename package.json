@@ -3,19 +3,18 @@
   "version": "1.0.0",
   "description": "mysql be_projectbook",
   "main": "server.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server.js",
     "build-src": "babel src -d build --copy-files",
     "build": "node build/server.js"
-    
   },
   "author": "HongPhong",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "7.22.5",
-    "@babel/node": "7.20.7",
+    "@babel/cli": "^7.24.6",
+    "@babel/core": "^7.22.5",
+    "@babel/node": "^7.20.7",
     "@babel/preset-env": "7.22.5",
     "bcryptjs": "2.4.3",
     "body-parser": "1.19.1",
@@ -30,7 +29,7 @@
     "jsonwebtoken": "9.0.0",
     "mysql2": "^3.4.3",
     "nodemailer": "6.7.5",
-    "nodemon": "2.0.12",
+    "nodemon": "^2.0.12",
     "passport": "0.6.0",
     "passport-facebook": "3.0.0",
     "passport-google-oauth20": "2.0.0",

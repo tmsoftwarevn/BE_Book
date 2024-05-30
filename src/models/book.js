@@ -1,17 +1,17 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Book extends Model {
+  class book extends Model {
     static associate(models) {
-      Book.belongsTo(models.Category, {
+      book.belongsTo(models.category, {
         foreignKey: "idCategory",
       });
-      Book.hasMany(models.OrderDetail, {
+      book.hasMany(models.orderDetail, {
         foreignKey: "idBook",
       });
     }
   }
-  Book.init(
+  book.init(
     {
       author: DataTypes.STRING,
       thumbnail: DataTypes.STRING,
@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Book",
+      modelName: "book",
     }
   );
-  return Book;
+  return book;
 };
