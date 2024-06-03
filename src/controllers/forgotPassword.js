@@ -14,7 +14,7 @@ const getCode = async (req, res) => {
         message: "Email chưa đúng định dạng",
       });
     }
-    let user = await db.User.findOne({
+    let user = await db.user.findOne({
       where: {
         email: req.body.email,
       },

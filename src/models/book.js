@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       rate: DataTypes.INTEGER,
       description: DataTypes.TEXT,
       idCategory: DataTypes.INTEGER,
+      slug: DataTypes.STRING
     },
     {
       sequelize,

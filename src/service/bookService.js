@@ -1,10 +1,12 @@
 import { Op } from "sequelize";
+import { convertSlug } from "../util/convertSlug";
 //import { Sequelize, sequelize } from "../models/index";
 // const Sequelize = require("../models/index");
 const { sequelize } = require("../models/index");
 const db = require("../models");
 
 const createBookService = async (book) => {
+  let slug = convertSlug(book.mainText);
   let info = await db.book.create({
     author: book.author,
     thumbnail: book.thumbnail,
@@ -15,6 +17,7 @@ const createBookService = async (book) => {
     quantity: book.quantity,
     rate: book.rate,
     idCategory: book.idCategory,
+    slug: slug,
   });
   info = info.get({ plain: true });
 
@@ -27,34 +30,67 @@ const createBookService = async (book) => {
 };
 
 const getInfoBookService = async (idBook) => {
-  let inf = await db.book.findOne({
-    where: { id: idBook },
-    attributes: [
-      "id",
-      "author",
-      "thumbnail",
-      "slider",
-      "mainText",
-      "price",
-      "sold",
-      "quantity",
-      "rate",
-      "category.category",
-      "createdAt",
-      "updatedAt",
-    ],
-    include: {
-      model: db.category,
-      attributes: [],
-    },
-    raw: true,
-  });
-
-  if (inf) {
-    return {
-      DT: "SUCCESS",
-      inf: inf,
-    };
+  let num = Number(idBook); // check neu la so or slug
+  if (num) {
+    let inf = await db.book.findOne({
+      where: { id: idBook },
+      attributes: [
+        "id",
+        "author",
+        "thumbnail",
+        "slider",
+        "mainText",
+        "price",
+        "sold",
+        "quantity",
+        "rate",
+        "slug",
+        "category.category",
+        "createdAt",
+        "updatedAt",
+      ],
+      include: {
+        model: db.category,
+        attributes: [],
+      },
+      raw: true,
+    });
+    if (inf) {
+      return {
+        DT: "SUCCESS",
+        inf: inf,
+      };
+    }
+  } else {
+    let inf = await db.book.findOne({
+      where: { slug: idBook },
+      attributes: [
+        "id",
+        "author",
+        "thumbnail",
+        "slider",
+        "mainText",
+        "price",
+        "sold",
+        "quantity",
+        "rate",
+        "slug",
+        "category.category",
+        "createdAt",
+        "updatedAt",
+      ],
+      include: {
+        model: db.category,
+        attributes: [],
+      },
+      raw: true,
+    });
+    if (inf) {
+      return {
+        DT: "SUCCESS",
+        inf: inf,
+      };
+    }
   }
 };
 
@@ -73,15 +109,19 @@ const deleteBookService = async (id) => {
   }
 };
 const updateBookService = async (id, up) => {
+  let slug = convertSlug(up.mainText);
+
   let values = {
     author: up.author,
     thumbnail: up.thumbnail,
     slider: up.slider,
     mainText: up.mainText,
+    slug: slug,
     price: up.price,
     quantity: up.quantity,
     idCategory: up.idCategory,
   };
+
   let selector = {
     where: { id: id },
   };
@@ -157,6 +197,7 @@ const getListBookService = async (
         "thumbnail",
         "slider",
         "mainText",
+        "slug",
         "price",
         "sold",
         "quantity",
@@ -228,6 +269,7 @@ const getListBookHomeService = async (
         "thumbnail",
         "slider",
         "mainText",
+        "slug",
         "price",
         "sold",
         "quantity",
@@ -286,6 +328,7 @@ const updateBookAfterOrder = async (bookId, count) => {
 
 const listBookPopulateServiceAll = async () => {
   let d = await db.book.findAll({
+    limit: 8, // tìm 8 cuốn phổ biến , theo nhiều người mua nhất
     order: [["sold", "DESC"]],
   });
   if (d) {
@@ -315,6 +358,7 @@ const searchBookService = async (mainText, page, limit) => {
         "thumbnail",
         "slider",
         "mainText",
+        "slug",
         "price",
         "sold",
         "quantity",
@@ -344,6 +388,7 @@ const searchBookService = async (mainText, page, limit) => {
           "thumbnail",
           "slider",
           "mainText",
+          "slug",
           "price",
           "sold",
           "quantity",

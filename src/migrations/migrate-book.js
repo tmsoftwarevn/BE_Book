@@ -40,6 +40,9 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      slug: {
+        type: Sequelize.STRING,
+      },
       idCategory: {
         type: Sequelize.INTEGER,
       },
