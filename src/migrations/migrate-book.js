@@ -46,6 +46,15 @@ module.exports = {
       idCategory: {
         type: Sequelize.INTEGER,
       },
+      hinhthuc: {
+        type: Sequelize.STRING,
+      },
+      nhaxuatban: {
+        type: Sequelize.STRING,
+      },
+      ngayxuatban: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

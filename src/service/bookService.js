@@ -18,6 +18,10 @@ const createBookService = async (book) => {
     rate: book.rate,
     idCategory: book.idCategory,
     slug: slug,
+    description: book.description,
+    hinhthuc: book.hinhthuc,
+    nhaxuatban: book.nhaxuatban,
+    ngayxuatban: book.ngayxuatban,
   });
   info = info.get({ plain: true });
 
@@ -45,6 +49,10 @@ const getInfoBookService = async (idBook) => {
         "quantity",
         "rate",
         "slug",
+        "description",
+        "hinhthuc",
+        "ngayxuatban",
+        "nhaxuatban",
         "category.category",
         "createdAt",
         "updatedAt",
@@ -74,6 +82,10 @@ const getInfoBookService = async (idBook) => {
         "sold",
         "quantity",
         "rate",
+        "description",
+        "hinhthuc",
+        "ngayxuatban",
+        "nhaxuatban",
         "slug",
         "category.category",
         "createdAt",
@@ -110,7 +122,7 @@ const deleteBookService = async (id) => {
 };
 const updateBookService = async (id, up) => {
   let slug = convertSlug(up.mainText);
-
+  console.log('tttttt', up.ngayxuatban)
   let values = {
     author: up.author,
     thumbnail: up.thumbnail,
@@ -118,8 +130,12 @@ const updateBookService = async (id, up) => {
     mainText: up.mainText,
     slug: slug,
     price: up.price,
+    description: up.description,
     quantity: up.quantity,
     idCategory: up.idCategory,
+    hinhthuc: up.hinhthuc,
+    nhaxuatban: up.nhaxuatban,
+    ngayxuatban: up.ngayxuatban,
   };
 
   let selector = {
@@ -200,6 +216,10 @@ const getListBookService = async (
         "slug",
         "price",
         "sold",
+        "description",
+        "hinhthuc",
+        "ngayxuatban",
+        "nhaxuatban",
         "quantity",
         "rate",
         "category.category",
@@ -273,6 +293,10 @@ const getListBookHomeService = async (
         "price",
         "sold",
         "quantity",
+        "description",
+        "hinhthuc",
+        "ngayxuatban",
+        "nhaxuatban",
         "rate",
         "category.category",
         "createdAt",
@@ -360,6 +384,10 @@ const searchBookService = async (mainText, page, limit) => {
         "mainText",
         "slug",
         "price",
+        "description",
+        "hinhthuc",
+        "ngayxuatban",
+        "nhaxuatban",
         "sold",
         "quantity",
         "rate",
@@ -390,6 +418,10 @@ const searchBookService = async (mainText, page, limit) => {
           "mainText",
           "slug",
           "price",
+          "description",
+          "hinhthuc",
+          "ngayxuatban",
+          "nhaxuatban",
           "sold",
           "quantity",
           "rate",
