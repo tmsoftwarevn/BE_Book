@@ -17,6 +17,7 @@ const getOrderDetailService = async (idOrder) => {
         "book.mainText",
         "book.thumbnail",
         "book.id",
+        "order.idUser"
       ],
       include: [
         {

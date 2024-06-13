@@ -1,6 +1,6 @@
 const db = require("../models");
 const createOrderService = async (order) => {
-  let c = await db.order.create({
+  let c = await db.order.create({          // tạo name,phone ... vì khi user đổi địa chỉ thì còn giữ cái cũ
     totalProduct: order.totalProduct,
     payment: order.payment,
     total: order.total,

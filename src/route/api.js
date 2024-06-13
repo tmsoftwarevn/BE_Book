@@ -107,12 +107,14 @@ const initApiRouter = (app) => {
   router.put("/book/:id", checkMiddleware.checkJWT, bookController.updateBook);
   router.put("/updateBook", bookController.putBookAfterOrder);
 
+  // category
   router.post(
-    "/category/create",
-    checkMiddleware.checkJWT,
-    categoryController.postCreateCategory
+    "/category/create",categoryController.postCreateCategory
   );
   router.get("/database/category", categoryController.getListCategory);
+  router.delete("/category/:id", categoryController.delete_category)
+  router.put("/category/:id", categoryController.update_category)
+
 
   router.post("/delivery", deliveryController.postCreateInfoDelivery);
   router.get("/delivery/:id", deliveryController.getInfoDelivery);

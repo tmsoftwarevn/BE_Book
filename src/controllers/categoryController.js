@@ -5,7 +5,7 @@ const postCreateCategory = async (req, res) => {
   let data = await categoryService.createCategoryService(req.body.category);
   if (data && data.info) {
     return res.status(200).json({
-      message: "Create success",
+      EC: 1,
       data: data.info,
     });
   } else {
@@ -29,4 +29,47 @@ const getListCategory = async (req, res) => {
   }
 };
 
-export default { postCreateCategory, getListCategory };
+const delete_category = async (req, res) => {
+  try {
+    let data = await categoryService.delete_category(req.params.id);
+    if (data && data.EC) {
+      return res.status(200).json({
+        EC: 1,
+        data: "Xóa thành công",
+      });
+    } else {
+      return res.status(400).json({
+        EC: -1,
+        data: "Xóa thất bại",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      EC: -1,
+      data: "Lỗi server",
+    });
+  }
+};
+
+const update_category = async (req, res) => {
+  try {
+    let data = await categoryService.update_category(req.params.id, req.body);
+    if (data && data.DT) {
+      return res.status(200).json({
+        EC: 1,
+        data: data.DT,
+      });
+    } else {
+      return res.status(400).json({
+        EC: -1,
+        message: "có lỗi",
+      });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      message: "Some thing wrong",
+    });
+  }
+};
+export default { postCreateCategory, getListCategory, delete_category, update_category };

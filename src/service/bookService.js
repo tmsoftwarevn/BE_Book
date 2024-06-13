@@ -122,7 +122,7 @@ const deleteBookService = async (id) => {
 };
 const updateBookService = async (id, up) => {
   let slug = convertSlug(up.mainText);
-  console.log('tttttt', up.ngayxuatban)
+  
   let values = {
     author: up.author,
     thumbnail: up.thumbnail,
