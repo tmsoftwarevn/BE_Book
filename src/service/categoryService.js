@@ -4,6 +4,7 @@ const db = require("../models");
 const createCategoryService = async (cate) => {
   let data = await db.category.create({
     category: cate,
+    parentId: cate.parentId
   });
   data = data.get({ plain: true });
   if (data) {
@@ -16,7 +17,7 @@ const createCategoryService = async (cate) => {
 
 const listCatgoryService = async () => {
   let data = await db.category.findAll({
-    attributes: ["id", "category"],
+    attributes: ["id", "category","parentId"],
     raw: true,
   });
   if (data) {
@@ -50,6 +51,7 @@ const delete_category = async (id) => {
 const update_category = async (id, up) => {
   let values = {
     category: up.category,
+    parentId: up.parentId
   };
   let selector = {
     where: { id: id },

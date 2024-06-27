@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
   category.init(
     {
       category: DataTypes.STRING,
+      parentId: DataTypes.INTEGER,
+     
     },
     {
       sequelize,

@@ -13,6 +13,10 @@ module.exports = {
       category: {
         type: Sequelize.STRING,
       },
+      parentId: {
+        type: Sequelize.INTEGER, 
+      },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
