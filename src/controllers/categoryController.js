@@ -2,7 +2,7 @@
 import categoryService from "../service/categoryService";
 
 const postCreateCategory = async (req, res) => {
-  let data = await categoryService.createCategoryService(req.body.category);
+  let data = await categoryService.createCategoryService(req.body);
   if (data && data.info) {
     return res.status(200).json({
       EC: 1,
@@ -72,4 +72,35 @@ const update_category = async (req, res) => {
     });
   }
 };
-export default { postCreateCategory, getListCategory, delete_category, update_category };
+
+const get_Parent_Category = async (req, res) => {
+  try {
+    let data = await categoryService.get_Parent_Category(req.params.id);
+    if (data && data.EC === 1) {
+      return res.status(200).json({
+        EC: 1,
+        data: data.DT,
+      });
+    }
+
+    return res.status(400).json({
+      EC: -1,
+      message: "Something wrongs",
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      message: "Some thing wrong",
+    });
+  }
+};
+
+export default {
+  postCreateCategory,
+  getListCategory,
+  delete_category,
+  update_category,
+  get_Parent_Category
+};

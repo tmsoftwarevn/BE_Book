@@ -114,7 +114,7 @@ const initApiRouter = (app) => {
   router.get("/database/category", categoryController.getListCategory);
   router.delete("/category/:id", categoryController.delete_category)
   router.put("/category/:id", categoryController.update_category)
-
+  router.get("/parentCategory/:id", categoryController.get_Parent_Category);
 
   router.post("/delivery", deliveryController.postCreateInfoDelivery);
   router.get("/delivery/:id", deliveryController.getInfoDelivery);
