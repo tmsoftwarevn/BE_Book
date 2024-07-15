@@ -97,10 +97,30 @@ const get_Parent_Category = async (req, res) => {
   }
 };
 
+const get_category_parent_home = async(req, res) =>{
+  try {
+    let data = await categoryService.get_category_parent_home();
+    if(data.EC === 1){
+      return res.status(200).json({
+        EC: 1,
+        data: data.data
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      message: 'err server'
+    })
+  }
+}
+
 export default {
   postCreateCategory,
   getListCategory,
   delete_category,
   update_category,
-  get_Parent_Category
+  get_Parent_Category,
+  get_category_parent_home
+
 };

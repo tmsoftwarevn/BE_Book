@@ -1,5 +1,5 @@
 import { raw } from "body-parser";
-import { where } from "sequelize";
+import { literal, where } from "sequelize";
 
 const db = require("../models");
 const createCategoryService = async (cate) => {
@@ -59,6 +59,7 @@ const update_category = async (id, up) => {
     category: up.category,
     parentId: up.parentId,
   };
+
   let selector = {
     where: { id: id },
   };
@@ -79,12 +80,12 @@ const get_Parent_Category = async (id) => {
   try {
     let info;
     let arr = [];
-
+    // tìm cha id parent
     info = await db.category.findOne({
       where: { id: id },
       raw: true,
     });
-    arr.push(info?.category);
+    arr.push(info);
 
     if (info && info.parentId) {
       do {
@@ -94,12 +95,11 @@ const get_Parent_Category = async (id) => {
           raw: true,
         });
 
-        arr.push(d.category);
+        arr.push(d);
         info = d;
       } while (info?.parentId);
     }
 
-    
     return {
       EC: 1,
       DT: arr,
@@ -110,10 +110,52 @@ const get_Parent_Category = async (id) => {
   }
 };
 
+const get_category_parent_home = async() =>{
+  try {
+    let list = await db.category.findAll({
+      attributes: {
+        include: [
+          [literal('CAST(id AS CHAR)'), 'key'],        // Alias 'id' to 'key'
+          ['category', 'label'], // Alias 'category' to 'label'
+          "parentId",
+          
+        ],
+       
+      },
+      raw: true,
+    });
+    
+    let custom = getNestedChildren(list,0);
+    return {
+      EC: 1,
+      data: custom
+    }
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+const getNestedChildren = (arr, parentId) => {
+  var out = []
+  for (var i in arr) {
+    if (arr[i].parentId == parentId) {
+      var children = getNestedChildren(arr, arr[i].id)
+
+      if (children.length) {
+        arr[i].children = children
+      }
+      out.push(arr[i])
+    }
+  }
+  return out
+}
 export default {
   createCategoryService,
   listCatgoryService,
   delete_category,
   update_category,
   get_Parent_Category,
+  get_category_parent_home
+
 };
