@@ -19,10 +19,12 @@ const getInfoBook = async (req, res) => {
     return res.status(200).json({
       message: "Get info success",
       data: data.inf,
+      EC: 1,
     });
   } else {
     return res.status(400).json({
       message: "Get info fail",
+      EC: -1,
     });
   }
 };
@@ -173,6 +175,31 @@ const getListSearchBook = async (req, res) => {
     });
   }
 };
+
+const get_list_from_idParent = async (req, res) => {
+  try {
+    let data = await bookService.get_list_from_idParent(req.body.arrId);
+
+    if (data) {
+      return res.status(200).json({
+        EC: 1,
+        data: data,
+      });
+    } else {
+      return res.status(400).json({
+        message: "Có lỗi xảy ra",
+        EC: -1,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "err server",
+      EC: -1,
+    });
+  }
+};
+
 export default {
   postCreateBook,
   getInfoBook,
@@ -183,4 +210,5 @@ export default {
   putBookAfterOrder,
   getListBookPopulateAll,
   getListSearchBook,
+  get_list_from_idParent,
 };

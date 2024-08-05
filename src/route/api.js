@@ -108,15 +108,15 @@ const initApiRouter = (app) => {
   router.put("/updateBook", bookController.putBookAfterOrder);
 
   // category
-  router.post(
-    "/category/create",categoryController.postCreateCategory
-  );
+  router.post("/category/create", categoryController.postCreateCategory);
   router.get("/database/category", categoryController.getListCategory);
-  router.delete("/category/:id", categoryController.delete_category)
-  router.put("/category/:id", categoryController.update_category)
+  router.delete("/category/:id", categoryController.delete_category);
+  router.put("/category/:id", categoryController.update_category);
   router.get("/parentCategory/:id", categoryController.get_Parent_Category);
-  router.get("/parentCategoryHome", categoryController.get_category_parent_home);
-
+  router.get(
+    "/parentCategoryHome",
+    categoryController.get_category_parent_home
+  );
 
   router.post("/delivery", deliveryController.postCreateInfoDelivery);
   router.get("/delivery/:id", deliveryController.getInfoDelivery);
@@ -163,6 +163,11 @@ const initApiRouter = (app) => {
 
   router.get("/book/popular/all", bookController.getListBookPopulateAll);
   router.get("/search", bookController.getListSearchBook);
+
+  // book list idParent
+  router.post("/listbook_idparent", bookController.get_list_from_idParent);
+
+
   return app.use("/api/v1", router);
 };
 

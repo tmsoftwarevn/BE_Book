@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import { convertSlug } from "../util/convertSlug";
+import { raw } from "body-parser";
 //import { Sequelize, sequelize } from "../models/index";
 // const Sequelize = require("../models/index");
 const { sequelize } = require("../models/index");
@@ -122,7 +123,7 @@ const deleteBookService = async (id) => {
 };
 const updateBookService = async (id, up) => {
   let slug = convertSlug(up.mainText);
-  
+
   let values = {
     author: up.author,
     thumbnail: up.thumbnail,
@@ -352,8 +353,8 @@ const updateBookAfterOrder = async (bookId, count) => {
 
 const listBookPopulateServiceAll = async () => {
   let d = await db.book.findAll({
-    limit: 8, // tìm 8 cuốn phổ biến , theo nhiều người mua nhất
-    order: [["sold", "DESC"]],
+    limit: 10, // tìm 8 cuốn phổ biến , theo nhiều người mua nhất // chỉnh lại là sách mới
+    order: [["createdAt", "DESC"]],
   });
   if (d) {
     return {
@@ -447,6 +448,25 @@ const searchBookService = async (mainText, page, limit) => {
     return null;
   }
 };
+
+const get_list_from_idParent = async (arrId) => {
+   console.log('arrr string', arrId)
+  try {
+    //const arr = JSON.parse(arrId);
+    //console.log('ar', arr)
+    let data = await db.book.findAll({
+      limit: 10,
+      where: { idCategory: arrId },
+      raw: true,
+    });
+ 
+    return data;
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   createBookService,
   getInfoBookService,
@@ -457,4 +477,5 @@ export default {
   updateBookAfterOrder,
   listBookPopulateServiceAll,
   searchBookService,
+  get_list_from_idParent,
 };

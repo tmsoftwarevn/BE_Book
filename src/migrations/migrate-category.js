@@ -13,6 +13,9 @@ module.exports = {
       category: {
         type: Sequelize.STRING,
       },
+      slug: {
+        type: Sequelize.STRING,
+      },
       parentId: {
         type: Sequelize.INTEGER, 
       },

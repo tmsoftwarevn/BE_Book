@@ -1,12 +1,15 @@
 import { raw } from "body-parser";
 import { literal, where } from "sequelize";
+import { convertSlug } from "../util/convertSlug";
 
 const db = require("../models");
 const createCategoryService = async (cate) => {
   try {
+    let slug = convertSlug(cate.category)
     let data = await db.category.create({
       category: cate.category,
       parentId: cate.parentId,
+      slug: slug
     });
     data = data.get({ plain: true });
     if (data) {
@@ -23,7 +26,7 @@ const createCategoryService = async (cate) => {
 
 const listCatgoryService = async () => {
   let data = await db.category.findAll({
-    attributes: ["id", "category", "parentId"],
+    attributes: ["id", "category", "parentId","slug"],
     raw: true,
   });
   if (data) {
@@ -55,9 +58,11 @@ const delete_category = async (id) => {
 };
 
 const update_category = async (id, up) => {
+  let slug = convertSlug(up.category)
   let values = {
     category: up.category,
     parentId: up.parentId,
+    slug: slug
   };
 
   let selector = {
@@ -76,6 +81,7 @@ const update_category = async (id, up) => {
   }
 };
 
+// custom admin " / /"
 const get_Parent_Category = async (id) => {
   try {
     let info;
@@ -118,7 +124,7 @@ const get_category_parent_home = async() =>{
           [literal('CAST(id AS CHAR)'), 'key'],        // Alias 'id' to 'key'
           ['category', 'label'], // Alias 'category' to 'label'
           "parentId",
-          
+          "slug"
         ],
        
       },
@@ -150,6 +156,8 @@ const getNestedChildren = (arr, parentId) => {
   }
   return out
 }
+
+
 export default {
   createCategoryService,
   listCatgoryService,
