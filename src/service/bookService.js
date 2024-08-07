@@ -351,6 +351,7 @@ const updateBookAfterOrder = async (bookId, count) => {
   }
 };
 
+//sach moi
 const listBookPopulateServiceAll = async () => {
   let d = await db.book.findAll({
     limit: 10, // tìm 8 cuốn phổ biến , theo nhiều người mua nhất // chỉnh lại là sách mới
@@ -449,21 +450,56 @@ const searchBookService = async (mainText, page, limit) => {
   }
 };
 
+// danh sach o trang chu
 const get_list_from_idParent = async (arrId) => {
-   console.log('arrr string', arrId)
   try {
     //const arr = JSON.parse(arrId);
-    //console.log('ar', arr)
+
     let data = await db.book.findAll({
       limit: 10,
+      order: [["createdAt", "DESC"]],
       where: { idCategory: arrId },
       raw: true,
     });
- 
+
     return data;
-    
   } catch (error) {
     console.log(error);
+  }
+};
+
+const get_list_from_arrId_paginate = async (page, limit, price, arrId) => {
+  try {
+    page = page ? +page : 1;
+    limit = +limit;
+    //console.log('arrrr', arrId)
+    let total = await db.book.count({
+      where: { idCategory: arrId },
+    });
+
+    let list = await db.book.findAll({
+      offset: (page - 1) * limit,
+      limit: limit,
+      //where: { idCategory: arrId },
+      where: {
+        [Op.and]: [
+          { idCategory: arrId },
+          {
+            price: {
+              [Op.between]: price ? price : [0, 99999999],
+            },
+          },
+        ],
+      },
+
+      order: [["createdAt", "desc"]],
+      raw: true,
+    });
+
+    return { list, total };
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };
 
@@ -478,4 +514,5 @@ export default {
   listBookPopulateServiceAll,
   searchBookService,
   get_list_from_idParent,
+  get_list_from_arrId_paginate,
 };

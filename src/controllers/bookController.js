@@ -200,6 +200,35 @@ const get_list_from_idParent = async (req, res) => {
   }
 };
 
+const get_list_from_arrId_paginate = async (req, res) => {
+  try {
+    const { page, limit,price } = req.query;
+    let data = await bookService.get_list_from_arrId_paginate(page, limit,price, req.body.arrId);
+    if (data && data.list) {
+      return res.status(200).json({
+        EC: 1,
+        data: {
+          page: page,
+          limit: limit,
+          totalPage: Math.ceil(+data.total / +limit),
+          total: data.total,
+        },
+        list: data.list,
+      });
+    }
+    return res.status(400).json({
+      EC: -1,
+      message: "fail fetch",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Err server",
+      EC: -1,
+    });
+  }
+};
+
 export default {
   postCreateBook,
   getInfoBook,
@@ -211,4 +240,6 @@ export default {
   getListBookPopulateAll,
   getListSearchBook,
   get_list_from_idParent,
+  get_list_from_arrId_paginate
+
 };
