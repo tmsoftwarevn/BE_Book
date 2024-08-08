@@ -202,8 +202,16 @@ const get_list_from_idParent = async (req, res) => {
 
 const get_list_from_arrId_paginate = async (req, res) => {
   try {
-    const { page, limit,price } = req.query;
-    let data = await bookService.get_list_from_arrId_paginate(page, limit,price, req.body.arrId);
+    const { page, limit, price, sp, sd } = req.query;
+    //sp, sd: sortprice, sortday
+    let data = await bookService.get_list_from_arrId_paginate(
+      page,
+      limit,
+      price,
+      sp,
+      sd,
+      req.body.arrId
+    );
     if (data && data.list) {
       return res.status(200).json({
         EC: 1,
@@ -240,6 +248,5 @@ export default {
   getListBookPopulateAll,
   getListSearchBook,
   get_list_from_idParent,
-  get_list_from_arrId_paginate
-
+  get_list_from_arrId_paginate,
 };

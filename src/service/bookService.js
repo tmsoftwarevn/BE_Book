@@ -60,7 +60,7 @@ const getInfoBookService = async (idBook) => {
       ],
       include: {
         model: db.category,
-        attributes: [],
+        attributes: ["id"],
       },
       raw: true,
     });
@@ -94,7 +94,7 @@ const getInfoBookService = async (idBook) => {
       ],
       include: {
         model: db.category,
-        attributes: [],
+        attributes: ["id"],
       },
       raw: true,
     });
@@ -468,31 +468,63 @@ const get_list_from_idParent = async (arrId) => {
   }
 };
 
-const get_list_from_arrId_paginate = async (page, limit, price, arrId) => {
+const get_list_from_arrId_paginate = async (
+  page,
+  limit,
+  price,
+  sp,
+  sd,
+  arrId
+) => {
   try {
+    //sp, sd: sortprice, sortday
+
     page = page ? +page : 1;
     limit = +limit;
-    //console.log('arrrr', arrId)
-    let total = await db.book.count({
-      where: { idCategory: arrId },
-    });
+    let arrPrice = price ? JSON.parse("[" + price + "]") : "";
 
-    let list = await db.book.findAll({
-      offset: (page - 1) * limit,
-      limit: limit,
-      //where: { idCategory: arrId },
+    console.log("arrprice", arrPrice);
+
+    let total = await db.book.count({
       where: {
         [Op.and]: [
           { idCategory: arrId },
           {
             price: {
-              [Op.between]: price ? price : [0, 99999999],
+              [Op.between]: price ? arrPrice : [0, 99999999],
+            },
+          },
+        ],
+      },
+    });
+
+    let order = [];
+
+    if (sp) {
+      order.push(["price", sp]);
+    }
+
+    if (sd) {
+      order.push(["createdAt", sd]);
+    }
+
+    let list = await db.book.findAll({
+      offset: (page - 1) * limit,
+      limit: limit,
+      order: order,
+
+      where: {
+        [Op.and]: [
+          { idCategory: arrId },
+          {
+            price: {
+              [Op.between]: price ? arrPrice : [0, 99999999],
             },
           },
         ],
       },
 
-      order: [["createdAt", "desc"]],
+      // order: [["createdAt", "desc"]],
       raw: true,
     });
 
