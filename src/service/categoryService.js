@@ -5,11 +5,11 @@ import { convertSlug } from "../util/convertSlug";
 const db = require("../models");
 const createCategoryService = async (cate) => {
   try {
-    let slug = convertSlug(cate.category)
+    let slug = convertSlug(cate.category);
     let data = await db.category.create({
       category: cate.category,
       parentId: cate.parentId,
-      slug: slug
+      slug: slug,
     });
     data = data.get({ plain: true });
     if (data) {
@@ -26,7 +26,7 @@ const createCategoryService = async (cate) => {
 
 const listCatgoryService = async () => {
   let data = await db.category.findAll({
-    attributes: ["id", "category", "parentId","slug"],
+    // attributes: ["id", "category", "parentId", "slug"],
     raw: true,
   });
   if (data) {
@@ -58,26 +58,32 @@ const delete_category = async (id) => {
 };
 
 const update_category = async (id, up) => {
-  let slug = convertSlug(up.category)
-  let values = {
-    category: up.category,
-    parentId: up.parentId,
-    slug: slug
-  };
-
-  let selector = {
-    where: { id: id },
-  };
-  let find = await db.category.findOne({
-    where: { id: id },
-  });
-  if (find) {
-    let u = await db.category.update(values, selector);
-    return {
-      DT: u,
+  try {
+  
+    let slug = convertSlug(up.category);
+    let values = {
+      category: up.category,
+      parentId: up.parentId,
+      slug: slug,
+      active: up.active,
     };
-  } else {
-    return null;
+
+    let selector = {
+      where: { id: id },
+    };
+    let find = await db.category.findOne({
+      where: { id: id },
+    });
+    if (find) {
+      let u = await db.category.update(values, selector);
+      return {
+        DT: u,
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -116,47 +122,44 @@ const get_Parent_Category = async (id) => {
   }
 };
 
-const get_category_parent_home = async() =>{
+const get_category_parent_home = async () => {
   try {
     let list = await db.category.findAll({
       attributes: {
         include: [
-          [literal('CAST(id AS CHAR)'), 'key'],        // Alias 'id' to 'key'
-          ['category', 'label'], // Alias 'category' to 'label'
+          [literal("CAST(id AS CHAR)"), "key"], // Alias 'id' to 'key'
+          ["category", "label"], // Alias 'category' to 'label'
           "parentId",
-          "slug"
+          "slug",
         ],
-       
       },
       raw: true,
     });
-    
-    let custom = getNestedChildren(list,0);
+
+    let custom = getNestedChildren(list, 0);
     return {
       EC: 1,
-      data: custom
-    }
-
+      data: custom,
+    };
   } catch (error) {
     console.log(error);
     return null;
   }
-}
+};
 const getNestedChildren = (arr, parentId) => {
-  var out = []
+  var out = [];
   for (var i in arr) {
     if (arr[i].parentId == parentId) {
-      var children = getNestedChildren(arr, arr[i].id)
+      var children = getNestedChildren(arr, arr[i].id);
 
       if (children.length) {
-        arr[i].children = children
+        arr[i].children = children;
       }
-      out.push(arr[i])
+      out.push(arr[i]);
     }
   }
-  return out
-}
-
+  return out;
+};
 
 export default {
   createCategoryService,
@@ -164,6 +167,5 @@ export default {
   delete_category,
   update_category,
   get_Parent_Category,
-  get_category_parent_home
-
+  get_category_parent_home,
 };

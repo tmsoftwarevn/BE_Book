@@ -14,6 +14,7 @@ import orderDetailController from "../controllers/orderDetailController";
 import statusController from "../controllers/statusController";
 import userService from "../service/userService";
 import forgotPassword from "../controllers/forgotPassword";
+import homeController from "../controllers/homeController";
 require("dotenv").config();
 const initApiRouter = (app) => {
   router.get("/", (req, res) => {
@@ -167,6 +168,13 @@ const initApiRouter = (app) => {
   // book list idParent
   router.post("/listbook_idparent", bookController.get_list_from_idParent);
   router.post("/listbook_arrid_paginate", bookController.get_list_from_arrId_paginate);
+
+
+  // home
+  router.post("/home", homeController.postCreateHome);
+  router.put("/home/:id", homeController.update_Home);
+  router.delete("/home/:id", homeController.delete_Home);
+  router.get("/home", homeController.getListHome);
 
   return app.use("/api/v1", router);
 };

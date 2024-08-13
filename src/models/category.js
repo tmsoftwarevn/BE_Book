@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       category: DataTypes.STRING,
       slug: DataTypes.STRING,
       parentId: DataTypes.INTEGER,
-     
+      active: DataTypes.INTEGER,
     },
     {
       sequelize,
