@@ -370,8 +370,11 @@ const searchBookService = async (mainText, page, limit) => {
   try {
     let total = await db.book.count({
       where: {
+        // mainText: {
+        //   [Op.like]: mainText ? "%" + mainText + "%" : "%%",
+        // },
         mainText: {
-          [Op.like]: mainText ? "%" + mainText + "%" : "%%",
+          [Op.regexp]: mainText,
         },
       },
     });

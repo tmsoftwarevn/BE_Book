@@ -15,6 +15,7 @@ import statusController from "../controllers/statusController";
 import userService from "../service/userService";
 import forgotPassword from "../controllers/forgotPassword";
 import homeController from "../controllers/homeController";
+import baivietController from "../controllers/baivietController";
 require("dotenv").config();
 const initApiRouter = (app) => {
   router.get("/", (req, res) => {
@@ -175,6 +176,18 @@ const initApiRouter = (app) => {
   router.put("/home/:id", homeController.update_Home);
   router.delete("/home/:id", homeController.delete_Home);
   router.get("/home", homeController.getListHome);
+
+  // bai viet
+
+  router.post("/baiviet", baivietController.insertBaiviet);
+  router.put("/baiviet/:id", baivietController.updateBaiviet);
+  router.delete("/baiviet/:id", baivietController.deleteBaiviet);
+  router.get("/baiviet/:slug", baivietController.get_detail_baiviet);
+  router.get("/search-baiviet", baivietController.search_baiviet);
+
+  router.get("/listbaiviet-home", baivietController.get_all_baiviet_paginate);
+  router.get("/listbaiviet-admin", baivietController.get_all_baiviet);
+  router.get("/noibat-home", baivietController.get_baiviet_trangchu);
 
   return app.use("/api/v1", router);
 };
