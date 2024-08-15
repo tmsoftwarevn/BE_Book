@@ -44,8 +44,8 @@ const get_all_baiviet_paginate = async (req, res) => {
   const data = await baivietService.get_all_baiviet_paginate(page, limit);
   if (data && data.list) {
     return res.status(200).json({
+      EC: 1,
       data: {
-        EC: 1,
         meta: {
           page: page,
           limit: limit,
@@ -65,6 +65,7 @@ const get_all_baiviet_paginate = async (req, res) => {
 
 const updateBaiviet = async (req, res) => {
   try {
+   
     let data = await baivietService.updateBaiviet(req.body, req.params.id);
     if (data && data.DT) {
       return res.status(200).json({
@@ -149,6 +150,7 @@ const search_baiviet = async (req, res) => {
         data: data,
         EC: 1,
       });
+      
     } else {
       return res.status(400).json({
         EC: -1,

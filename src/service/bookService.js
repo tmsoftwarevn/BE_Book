@@ -471,6 +471,7 @@ const get_list_from_idParent = async (arrId) => {
   }
 };
 
+// tung the loai phan trang
 const get_list_from_arrId_paginate = async (
   page,
   limit,
@@ -537,6 +538,22 @@ const get_list_from_arrId_paginate = async (
     return null;
   }
 };
+// cung loai
+
+const get_list_related = async (arrId) => {
+  try {
+    let data = await db.book.findAll({
+      limit: 10,
+      order: [["createdAt", "DESC"]],
+      where: { idCategory: arrId },
+      raw: true,
+    });
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default {
   createBookService,
@@ -550,4 +567,5 @@ export default {
   searchBookService,
   get_list_from_idParent,
   get_list_from_arrId_paginate,
+  get_list_related
 };

@@ -168,6 +168,8 @@ const initApiRouter = (app) => {
 
   // book list idParent
   router.post("/listbook_idparent", bookController.get_list_from_idParent);
+
+  router.post("/listbook_related", bookController.get_list_related);
   router.post("/listbook_arrid_paginate", bookController.get_list_from_arrId_paginate);
 
 

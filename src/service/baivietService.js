@@ -60,6 +60,7 @@ const get_all_baiviet_paginate = async (page, limit) => {
 
 const updateBaiviet = async (data, id) => {
   try {
+    
     let u = await db.baiviet.update(
       {
         tieude: data.tieude,
@@ -68,7 +69,6 @@ const updateBaiviet = async (data, id) => {
         mota_ngan: data.mota_ngan,
         noidung: data.noidung,
         thumbnail: data.thumbnail,
-
         slug: data.slug,
       },
       {
@@ -113,8 +113,8 @@ const get_all_baiviet = async () => {
 const get_baiviet_trangchu = async (req, res) => {
   try {
     let a = await db.baiviet.findAll({
-      order: [["createdAt", "asc"]], ///desc: update mới nhất lên đầu, theo ngày
-      limit: 5, // 5 bai mới nhất
+      order: [["createdAt", "desc"]], ///desc: update mới nhất lên đầu, theo ngày
+      limit: 6, // 3 bai mới nhất
       raw: true,
     });
     return a;

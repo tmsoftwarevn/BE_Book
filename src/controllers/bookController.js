@@ -237,6 +237,29 @@ const get_list_from_arrId_paginate = async (req, res) => {
   }
 };
 
+const get_list_related = async (req, res) => {
+  try {
+    let data = await bookService.get_list_related(req.body.arrId);
+
+    if (data) {
+      return res.status(200).json({
+        EC: 1,
+        data: data,
+      });
+    } else {
+      return res.status(400).json({
+        message: "Có lỗi xảy ra",
+        EC: -1,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "err server",
+      EC: -1,
+    });
+  }
+};
 export default {
   postCreateBook,
   getInfoBook,
@@ -249,4 +272,5 @@ export default {
   getListSearchBook,
   get_list_from_idParent,
   get_list_from_arrId_paginate,
+  get_list_related
 };
